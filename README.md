@@ -24,7 +24,7 @@ If possible, I would like to expand the application with additional features:
 ## Tech Stack
 
 - **Programming Language:** Java
-- **Libraries:** Java standard library, including `ArrayList`, `LocalDate`, `FileWriter`, `BufferedReader`, and `Scanner`.
+- **Libraries:** Java standard library, including `ArrayList`, `LocalDate`, `FileWriter`, and `BufferedReader`.
 - **Data Storage:** CSV files will store expenses and monthly budget information.
 - **Development Environment:** IntelliJ IDEA
 - **Version Control:** Git and GitHub
