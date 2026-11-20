@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        ArrayList<Expense> expenses = new ArrayList<>();
+        ArrayList<Expense> expenses = ExpenseFileManager.loadExpenses();
 
         boolean running = true;
 
@@ -90,14 +90,13 @@ public class Main {
                             date = LocalDate.parse(dateInput);
                             validDate = true;
                         } catch (DateTimeParseException e) {
-                            System.out.println(
-                                    "Invalid date. Please use YYYY-MM-DD (example: 2026-11-24)."
-                            );
+                            System.out.println("Invalid date. Please use YYYY-MM-DD (example: 2026-11-24).");
                         }
                     }
 
                     Expense expense = new Expense(amount, name, category, date);
                     expenses.add(expense);
+                    ExpenseFileManager.saveExpenses(expenses);
 
                     System.out.println("Expense added successfully!");
                     break;
