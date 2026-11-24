@@ -1,3 +1,4 @@
+
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 public class ExpenseFileManager {
 
     private static String file_name = "expenses.csv";
+    private static String budget_file = "budget.csv";
 
     public static void saveExpenses(ArrayList<Expense> expenses) {
         try {
@@ -54,5 +56,42 @@ public class ExpenseFileManager {
         }
 
         return expenses;
+    }
+
+    public static void saveBudget(double budget) {
+        try {
+            FileWriter writer = new FileWriter(budget_file);
+
+            writer.write("MonthlyBudget\n");
+            writer.write(budget + "\n");
+
+            writer.close();
+
+        } catch (IOException e) {
+            System.out.println("Error saving budget.");
+        }
+    }
+
+    public static double loadBudget() {
+        double budget = 0;
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(budget_file));
+
+            reader.readLine();
+
+            String line = reader.readLine();
+
+            if (line != null) {
+                budget = Double.parseDouble(line);
+            }
+
+            reader.close();
+
+        } catch (IOException e) {
+
+        }
+
+        return budget;
     }
 }

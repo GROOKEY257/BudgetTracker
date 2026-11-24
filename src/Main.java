@@ -9,6 +9,7 @@ public class Main {
         Scanner input = new Scanner(System.in);
 
         ArrayList<Expense> expenses = ExpenseFileManager.loadExpenses();
+        double monthlyBudget = ExpenseFileManager.loadBudget();
 
         boolean running = true;
 
@@ -114,7 +115,33 @@ public class Main {
                     break;
 
                 case 3:
+                    double newBudget = 0;
+                    boolean validBudget = false;
+
+                    while (!validBudget) {
+                        System.out.print("Enter your monthly budget: ");
+                        String budgetInput = input.nextLine();
+
+                        try {
+                            newBudget = Double.parseDouble(budgetInput);
+
+                            if (newBudget > 0) {
+                                validBudget = true;
+                            } else {
+                                System.out.println("Budget must be greater than 0.");
+                            }
+
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter a valid number.");
+                        }
+                    }
+
+                    monthlyBudget = newBudget;
+                    ExpenseFileManager.saveBudget(monthlyBudget);
+
+                    System.out.println("Monthly budget saved successfully!");
                     break;
+
 
                 case 4:
                     break;
