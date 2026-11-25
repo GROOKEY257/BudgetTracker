@@ -144,6 +144,22 @@ public class Main {
 
 
                 case 4:
+                    double totalExpenses = 0;
+
+                    for (Expense e : expenses) {
+                        if (e.getDate().getMonth() == LocalDate.now().getMonth() && e.getDate().getYear() == LocalDate.now().getYear()) {
+                            totalExpenses += e.getAmount();
+                        }
+                    }
+
+                    if (monthlyBudget == 0) {
+                        System.out.println("You haven't set a monthly budget yet.");
+                    }
+                    else {
+                        System.out.println("\nMonthly Budget: $" + monthlyBudget);
+                        System.out.println("Total Expenses: $" + totalExpenses);
+                        System.out.println("Remaining Budget: $" + (monthlyBudget - totalExpenses));
+                    }
                     break;
 
                 case 5:
