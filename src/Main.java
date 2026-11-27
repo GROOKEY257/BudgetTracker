@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.time.LocalDate;
@@ -34,7 +35,8 @@ public class Main {
             System.out.println("4. View Remaining Budget");
             System.out.println("5. Monthly Spending Summary");
             System.out.println("6. Category Breakdown");
-            System.out.println("7. Exit");
+            System.out.println("7. Edit Existing Expense");
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
 
             //Get and validate the user's menu selection
@@ -44,7 +46,7 @@ public class Main {
             try {
                 choice = Integer.parseInt(choiceInput);
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Enter a number from 1-7.");
+                System.out.println("Invalid input. Enter a number from 1-8.");
                 continue;
             }
 
@@ -205,13 +207,19 @@ public class Main {
                         showCategoryBreakdown(expenses, categoryMonth);
                     }
                     break;
-                //Exit the application
+
+                //Allow the user to edit an existing expense
                 case 7:
+                    editExpense(input, expenses);
+                    break;
+
+                //Exit the application
+                case 8:
                     running = false;
                     System.out.println("Thank you for using Budget Tracker!");
                     break;
 
-                //Handle menu selections that are not between 1 and 7
+                //Handle menu selections that are not between 1 and 8
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
@@ -293,5 +301,105 @@ public class Main {
                 System.out.printf("%s: $%.2f%n", entry.getKey(), entry.getValue());
             }
         }
+    }
+
+    /**
+     * Allows the user to select and edit an existing expense.
+     * The user can update the name, amount, category, and date.
+     *
+     * @param input Scanner used to read the user's input
+     * @param expenses the list of expenses that can be edited
+     */
+    public static void editExpense(Scanner input, ArrayList<Expense> expenses) {
+        //Check whether there are any expenses to edit
+        if (expenses.isEmpty()) {
+            System.out.println("There are no expenses to edit.");
+            return;
+        }
+
+        //Display all expenses with their corresponding numbers
+        System.out.println("\nYour Expenses:");
+
+        for (int i = 0; i < expenses.size(); i++) {
+            System.out.println((i + 1) + ". " + expenses.get(i));
+        }
+
+        //Ask the user which expense they want to edit
+        System.out.print("Enter the number of the expense to edit: ");
+        String selection = input.nextLine();
+
+        int expenseNumber;
+
+        //Convert the selection into an integer
+        try {
+            expenseNumber = Integer.parseInt(selection);
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter a valid number.");
+            return;
+        }
+
+        //Make sure the selected number matches an existing expense
+        if (expenseNumber < 1 || expenseNumber > expenses.size()) {
+            System.out.println("Invalid expense number.");
+            return;
+        }
+
+        //Get the selected expense from the ArrayList
+        Expense selectedExpense = expenses.get(expenseNumber - 1);
+
+        System.out.println("Press Enter to keep the current value.");
+
+        //Get a new name if the user wants to change it
+        System.out.print("Enter new name (" + selectedExpense.getName() + "): ");
+        String newName = input.nextLine();
+
+        if (!newName.trim().isEmpty()) {
+            selectedExpense.setName(newName);
+        }
+
+        //Get a new amount if the user wants to change it
+        System.out.print("Enter new amount (" + selectedExpense.getAmount() + "): ");
+        String newAmount = input.nextLine();
+
+        if (!newAmount.trim().isEmpty()) {
+            try {
+                double amount = Double.parseDouble(newAmount);
+
+                //Validate the new amount before updating the expense
+                if (amount > 0 && newAmount.matches("\\d+(\\.\\d{1,2})?")) {
+                    selectedExpense.setAmount(amount);
+                } else {
+                    System.out.println("Invalid amount. Keeping the old amount.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid amount. Keeping the old amount.");
+            }
+        }
+
+        //Get a new category if the user wants to change it
+        System.out.print("Enter new category (" + selectedExpense.getCategory() + "): ");
+        String newCategory = input.nextLine();
+
+        if (!newCategory.trim().isEmpty()) {
+            selectedExpense.setCategory(newCategory);
+        }
+
+        //Get a new date if the user wants to change it
+        System.out.print("Enter new date (" + selectedExpense.getDate() + "): ");
+        String newDate = input.nextLine();
+
+        if (!newDate.trim().isEmpty()) {
+            try {
+                LocalDate date = LocalDate.parse(newDate);
+                selectedExpense.setDate(date);
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date. Keeping the old date.");
+            }
+        }
+
+        //Save the updated expense list to the CSV file
+        ExpenseFileManager.saveExpenses(expenses);
+
+        System.out.println("Expense updated successfully!");
     }
 }
