@@ -6,6 +6,18 @@ A Java command-line budgeting application for recording expenses, managing a mon
 
 The goal of this project is to create a free personal budgeting app that helps users keep track of their spending without requiring a paid subscription. Many budgeting apps put useful features behind subscriptions, so this project aims to provide a free alternative for users to manage their expenses and monthly budgets.
 
+## How It Works
+
+Budget Tracker uses a menu-driven command-line interface that allows users to interact with different budgeting features.
+
+When the application starts, it loads previously saved expenses and the monthly budget from CSV files. Users can then choose from eight menu options to add expenses, view recorded expenses, set a monthly budget, calculate remaining money, generate monthly spending summaries, view category breakdowns, edit existing expenses, or exit the application.
+
+The Expense class stores each expense's amount, name, category, and date. The ExpenseFileManager class handles reading and writing expense and budget information to CSV files.
+
+## System Diagram
+
+![Budget Tracker System Diagram](System%20Diagram.png)
+
 ## Tech Stack
 
 - **Language:** Java
