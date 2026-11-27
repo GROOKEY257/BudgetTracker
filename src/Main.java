@@ -33,7 +33,8 @@ public class Main {
             System.out.println("3. Set Monthly Budget");
             System.out.println("4. View Remaining Budget");
             System.out.println("5. Monthly Spending Summary");
-            System.out.println("6. Exit");
+            System.out.println("6. Category Breakdown");
+            System.out.println("7. Exit");
             System.out.print("Enter your choice: ");
 
             //Get and validate the user's menu selection
@@ -43,7 +44,7 @@ public class Main {
             try {
                 choice = Integer.parseInt(choiceInput);
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Enter a number from 1-9.");
+                System.out.println("Invalid input. Enter a number from 1-7.");
                 continue;
             }
 
@@ -196,13 +197,21 @@ public class Main {
                     }
                     break;
 
-                //Exit the application
+                //Show how much was spent in each category
                 case 6:
+                    YearMonth categoryMonth = getMonth(input);
+
+                    if (categoryMonth != null) {
+                        showCategoryBreakdown(expenses, categoryMonth);
+                    }
+                    break;
+                //Exit the application
+                case 7:
                     running = false;
                     System.out.println("Thank you for using Budget Tracker!");
                     break;
 
-                //Handle menu selections that are not between 1 and 9
+                //Handle menu selections that are not between 1 and 7
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
@@ -250,4 +259,39 @@ public class Main {
         return total;
     }
 
+    /**
+     * Displays the total amount spent in each category during a selected month.
+     *
+     * @param expenses the list of recorded expenses
+     * @param month the month to display the category breakdown for
+     */
+    public static void showCategoryBreakdown(ArrayList<Expense> expenses, YearMonth month) {
+        //Store each category and its total spending in a HashMap
+        HashMap<String, Double> categories = new HashMap<>();
+
+        //Go through the expenses and group their amounts by category
+        for (Expense e : expenses) {
+            if (YearMonth.from(e.getDate()).equals(month)) {
+                String category = e.getCategory();
+
+                //Add to the category's existing total or create a new entry
+                if (categories.containsKey(category)) {
+                    categories.put(category, categories.get(category) + e.getAmount());
+                } else {
+                    categories.put(category, e.getAmount());
+                }
+            }
+        }
+
+        System.out.println("\nCategory Breakdown for " + month + ":");
+
+        if (categories.isEmpty()) {
+            System.out.println("No expenses recorded for this month.");
+        } else {
+            //Display the total spending for each category
+            for (Map.Entry<String, Double> entry : categories.entrySet()) {
+                System.out.printf("%s: $%.2f%n", entry.getKey(), entry.getValue());
+            }
+        }
+    }
 }
