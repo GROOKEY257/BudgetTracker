@@ -43,7 +43,7 @@ public class Main {
             try {
                 choice = Integer.parseInt(choiceInput);
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Enter a number from 1-9.");
+                System.out.println("Invalid input. Enter a number from 1-6.");
                 continue;
             }
 
@@ -249,5 +249,4 @@ public class Main {
 
         return total;
     }
-
 }
